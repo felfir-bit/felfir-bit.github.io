@@ -13,14 +13,9 @@
     <meta property="og:url" content="https://SalemAI.kz">
     <link rel="canonical" href="https://SalemAI.kz">
     
-    <!-- Google / Search Engine Tags -->
-    <meta itemprop="name" content="SalemAI - Автоматизация бизнеса и прием лидов">
-    <meta itemprop="description" content="Профессиональная автоматизация бизнес-процессов в Казахстане">
-    
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Кастомные стили */
         :root {
             --primary: #1e1e2f;
             --secondary: #007bff;
@@ -30,10 +25,6 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             scroll-behavior: smooth;
-        }
-        
-        .nav-link {
-            position: relative;
         }
         
         .nav-link::after {
@@ -72,13 +63,8 @@
             transform: translateY(0);
         }
         
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        
-        .price-card:hover {
-            transform: scale(1.03);
+        .service-card:hover, .price-card:hover {
+            transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
         
@@ -119,35 +105,24 @@
             align-items: center;
         }
         
-        .modal-content {
+        .modal-content, .service-modal-content {
             background-color: white;
             padding: 30px;
             border-radius: 10px;
-            max-width: 500px;
             width: 90%;
+            max-width: 500px;
             animation: modalFadeIn 0.3s ease;
         }
         
         .service-modal-content {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
             max-width: 800px;
-            width: 90%;
             max-height: 90vh;
             overflow-y: auto;
-            animation: modalFadeIn 0.3s ease;
         }
         
         @keyframes modalFadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .input-error {
@@ -186,17 +161,19 @@
             margin-right: 10px;
             font-weight: bold;
         }
+        
+        .popular-tag {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background-color: #007bff;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            font-weight: bold;
+            border-bottom-left-radius: 0.5rem;
+        }
     </style>
-
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-<script>
-  (function(){
-    emailjs.init("EM5fcMMw75mveebqX");
-  })();
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
 </head>
 <body class="bg-gray-50">
     <!-- Навигация -->
@@ -210,24 +187,22 @@
             </a>
             
             <div class="hidden md:flex space-x-8">
-                <a href="#about" class="nav-link text-gray-700 hover:text-blue-600 transition">О нас</a>
-                <a href="#advantages" class="nav-link text-gray-700 hover:text-blue-600 transition">Преимущества</a>
-                <a href="#services" class="nav-link text-gray-700 hover:text-blue-600 transition">Услуги</a>
-                <a href="#pricing" class="nav-link text-gray-700 hover:text-blue-600 transition">Прайс-лист</a>
-                <a href="#contact" class="nav-link text-gray-700 hover:text-blue-600 transition">Контакты</a>
+                <a href="#about" class="nav-link text-gray-700 hover:text-blue-600 transition relative">О нас</a>
+                <a href="#advantages" class="nav-link text-gray-700 hover:text-blue-600 transition relative">Преимущества</a>
+                <a href="#services" class="nav-link text-gray-700 hover:text-blue-600 transition relative">Услуги</a>
+                <a href="#pricing" class="nav-link text-gray-700 hover:text-blue-600 transition relative">Прайс-лист</a>
+                <a href="#contact" class="nav-link text-gray-700 hover:text-blue-600 transition relative">Контакты</a>
             </div>
             
             <button onclick="openModal()" class="hidden md:block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
                 Оставить заявку
             </button>
             
-            <!-- Мобильное меню -->
             <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
                 <i class="fas fa-bars text-2xl"></i>
             </button>
         </div>
         
-        <!-- Мобильное меню (скрытое) -->
         <div id="mobile-menu" class="hidden md:hidden bg-white w-full px-4 py-2 shadow-lg">
             <div class="flex flex-col space-y-3">
                 <a href="#about" class="text-gray-700 hover:text-blue-600 py-2" onclick="closeMobileMenu()">О нас</a>
@@ -542,11 +517,9 @@
                 </div>
                 
                 <!-- Тариф 3 -->
-                <div class="price-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
-                    <div class="p-6 relative">
-                        <div class="absolute top-0 right-0 bg-blue-600 text-white px-3 py-1 text-sm font-bold rounded-bl-lg">
-                            Популярный
-                        </div>
+                <div class="price-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300 relative">
+                    <div class="popular-tag">Популярный</div>
+                    <div class="p-6">
                         <h3 class="text-xl font-bold text-center mb-2">Профессиональный</h3>
                         <div class="price-tag text-center">650 000 ₸</div>
                         <p class="text-center text-gray-500 mb-6">Срок реализации: 7-14 дней</p>
@@ -743,7 +716,8 @@
             
             <form id="modal-form" class="space-y-4">
                 <input type="hidden" id="service-type" name="service-type">
-               <input type="hidden" id="selected_tariff" name="selected_tariff" value="Не выбран">
+                <input type="hidden" id="selected_tariff" name="selected_tariff" value="Не выбран">
+                
                 <div>
                     <label for="modal-name" class="block mb-2 text-gray-700">Ваше имя *</label>
                     <input type="text" id="modal-name" name="name" 
@@ -787,39 +761,47 @@
     </div>
 
     <!-- Модальное окно для услуг -->
-<div id="service-modal" class="modal">
-  <div class="service-modal-content">
-    <div class="flex justify-between items-center mb-6">
-      <h3 class="text-2xl font-bold text-gray-800" id="service-modal-title">Услуга</h3>
-      <!-- Кнопка закрытия (крестик) -->
-      <button onclick="closeServiceModal()" class="text-gray-500 hover:text-gray-700">
-        <i class="fas fa-times"></i>
-      </button>
+    <div id="service-modal" class="modal">
+        <div class="service-modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800" id="service-modal-title">Услуга</h3>
+                <button onclick="closeServiceModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="service-modal-description" class="text-gray-700 mb-6"></div>
+            
+            <ul id="service-modal-features" class="feature-list mb-8"></ul>
+            
+            <div class="flex justify-between items-center">
+                <button onclick="closeServiceModal()" class="text-blue-600 font-semibold hover:text-blue-800 transition mr-4">
+                    ← Вернуться к услугам
+                </button>
+                <button 
+                    onclick="closeServiceModal(); openModal(document.getElementById('service-modal-title').textContent);" 
+                    class="btn-primary text-white px-6 py-3 rounded-lg font-semibold"
+                >
+                    Оставить заявку
+                </button>
+            </div>
+        </div>
     </div>
-    
-    <!-- Описание услуги -->
-    <div id="service-modal-description" class="text-gray-700 mb-6"></div>
-    
-    <!-- Список возможностей -->
-    <ul id="service-modal-features" class="feature-list mb-8"></ul>
-    
-    <!-- Кнопка "Оставить заявку" (правильное место!) -->
-    <div class="flex justify-between items-center">
-      <button onclick="closeServiceModal()" class="text-blue-600 font-semibold hover:text-blue-800 transition mr-4">
-        ← Вернуться к услугам
-      </button>
-      <button 
-        onclick="closeServiceModal(); openModal(document.getElementById('service-modal-title').textContent);" 
-        class="btn-primary text-white px-6 py-3 rounded-lg font-semibold"
-      >
-        Оставить заявку
-      </button>
-    </div>
-  </div>
-</div>
 
-    <!-- JavaScript -->
+    <!-- Подключение скриптов -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <!-- Основной JavaScript -->
     <script>
+        // Инициализация EmailJS
+        (function(){
+            emailjs.init("EM5fcMMw75mveebqX");
+        })();
+
+        // Конфигурация Google Sheets
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgkxvXsC-rv7nc8ElYHP6SiIruYQa-TuHX5hhq3bImqtGu2Lk6d8hpLHph2LWJKH_1NQ/exec";
+
         // Мобильное меню
         const mobileMenuButton = document.getElementById('mobile-menu-button');
         const mobileMenu = document.getElementById('mobile-menu');
@@ -837,18 +819,17 @@
         const modalTitle = document.getElementById('modal-title');
         const serviceTypeInput = document.getElementById('service-type');
         
-        
-            function openModal(serviceType = '') {
-  closeServiceModal();
+        function openModal(serviceType = '') {
+            closeServiceModal();
             if (serviceType) {
                 modalTitle.textContent = `Заявка: ${serviceType}`;
                 serviceTypeInput.value = serviceType;
                 const tariffField = document.getElementById('selected_tariff');
-    if (serviceType.includes('Пакет:')) {
-        tariffField.value = serviceType.replace('Пакет: ', '');
-    } else {
-        tariffField.value = 'Не выбран';  // Сброс, если это не тариф
-    }
+                if (serviceType.includes('Пакет:')) {
+                    tariffField.value = serviceType.replace('Пакет: ', '');
+                } else {
+                    tariffField.value = 'Не выбран';
+                }
             } else {
                 modalTitle.textContent = 'Оставить заявку';
                 serviceTypeInput.value = '';
@@ -880,10 +861,8 @@
             serviceModalTitle.textContent = title;
             serviceModalDescription.textContent = description;
             
-            // Очищаем предыдущие элементы
             serviceModalFeatures.innerHTML = '';
             
-            // Добавляем новые элементы
             features.forEach(feature => {
                 const li = document.createElement('li');
                 li.textContent = feature;
@@ -909,108 +888,132 @@
             }
         });
         
-        // Валидация формы в модальном окне
-        const modalForm = document.getElementById('modal-form');
+        // Валидация форм
+        function validateForm(form) {
+            let isValid = true;
+            const nameInput = form.querySelector("[name='name']");
+            const phoneInput = form.querySelector("[name='phone']");
+            const nameError = form.querySelector("#name-error") || form.querySelector("#modal-name-error");
+            const phoneError = form.querySelector("#phone-error") || form.querySelector("#modal-phone-error");
+            const agreeCheckbox = form.querySelector("[name='agree']");
+            
+            // Валидация имени
+            if (nameInput.value.trim() === '') {
+                nameInput.classList.add('input-error');
+                if (nameError) nameError.style.display = 'block';
+                isValid = false;
+            } else {
+                nameInput.classList.remove('input-error');
+                if (nameError) nameError.style.display = 'none';
+            }
+            
+            // Валидация телефона
+            const phoneRegex = /^(\+7|8)[\s(]?\d{3}[)\s]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
+            if (!phoneRegex.test(phoneInput.value.trim())) {
+                phoneInput.classList.add('input-error');
+                if (phoneError) phoneError.style.display = 'block';
+                isValid = false;
+            } else {
+                phoneInput.classList.remove('input-error');
+                if (phoneError) phoneError.style.display = 'none';
+            }
+            
+            // Валидация согласия
+            if (agreeCheckbox && !agreeCheckbox.checked) {
+                Swal.fire('Ошибка', 'Пожалуйста, подтвердите согласие на обработку персональных данных', 'error');
+                isValid = false;
+            }
+            
+            return isValid;
+        }
         
-        modalForm.addEventListener('submit', function(e) {
+        // Отправка данных в Google Sheets
+        async function sendToGoogleSheet(data) {
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        name: data.name || "",
+                        phone: data.phone || "",
+                        message: data.message || "",
+                        service: data.service || "",
+                        date: new Date().toLocaleString("ru-RU"),
+                        formType: data.formType || "Общий запрос",
+                        tariff: data.tariff || "Не указан"
+                    }),
+                });
+                
+                const result = await response.json();
+                return result.result === "success";
+            } catch (error) {
+                console.error("Ошибка:", error);
+                return false;
+            }
+        }
+        
+        // Отправка формы
+        function sendFormWithEmailJS(formElement) {
+            Swal.fire({
+                title: 'Отправка...',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            const formData = {
+                name: formElement.querySelector("[name='name']").value.trim(),
+                phone: formElement.querySelector("[name='phone']").value.trim(),
+                message: formElement.querySelector("[name='message']")?.value.trim() || "-",
+                email: formElement.querySelector("[name='email']")?.value.trim() || "-",
+                service: formElement.querySelector("[name='service-type']")?.value || "Общий запрос",
+                tariff: formElement.querySelector("[name='selected_tariff']")?.value || "Не указан",
+                formType: formElement.id === "modal-form" ? "Модальная форма" : "Основная форма"
+            };
+
+            // Отправляем в обе системы параллельно
+            const emailJSPromise = emailjs.sendForm("service_f0x3prq", "template_zbrybup", formElement);
+            const googleSheetsPromise = sendToGoogleSheet(formData);
+
+            Promise.all([emailJSPromise, googleSheetsPromise])
+                .then(([emailResult, googleSuccess]) => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Спасибо!',
+                        text: 'Ваша заявка принята! Мы свяжемся с вами в ближайшее время.',
+                        confirmButtonColor: '#007bff'
+                    });
+                    formElement.reset();
+                })
+                .catch(error => {
+                    console.error("Ошибка отправки:", error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ошибка!',
+                        text: 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже или свяжитесь с нами другим способом.',
+                        confirmButtonColor: '#d33'
+                    });
+                });
+        }
+        
+        // Обработчики форм
+        document.getElementById('modal-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            let isValid = validateModalForm();
-            
-            if (isValid) {
-                sendFormWithEmailJS(modalForm);
+            if (validateForm(this)) {
+                sendFormWithEmailJS(this);
                 closeModal();
             }
         });
         
-        function validateModalForm() {
-            let isValid = true;
-            const nameInput = document.getElementById('modal-name');
-            const phoneInput = document.getElementById('modal-phone');
-            const nameError = document.getElementById('modal-name-error');
-            const phoneError = document.getElementById('modal-phone-error');
-            const agreeCheckbox = document.getElementById('modal-agree');
-            
-            // Валидация имени
-            if (nameInput.value.trim() === '') {
-                nameInput.classList.add('input-error');
-                nameError.style.display = 'block';
-                isValid = false;
-            } else {
-                nameInput.classList.remove('input-error');
-                nameError.style.display = 'none';
-            }
-            
-            // Валидация телефона
-            const phoneRegex = /^(\+7|8)[\s(]?\d{3}[)\s]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
-            if (!phoneRegex.test(phoneInput.value.trim())) {
-                phoneInput.classList.add('input-error');
-                phoneError.style.display = 'block';
-                isValid = false;
-            } else {
-                phoneInput.classList.remove('input-error');
-                phoneError.style.display = 'none';
-            }
-            
-            // Валидация согласия
-            if (!agreeCheckbox.checked) {
-                Swal.fire('Ошибка', 'Пожалуйста, подтвердите согласие на обработку персональных данных', 'error');
-                isValid = false;
-            }
-            
-            return isValid;
-        }
-        
-        // Валидация основной формы
-        const contactForm = document.getElementById('contact-form');
-        
-        contactForm.addEventListener('submit', function(e) {
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            let isValid = validateContactForm();
-            
-            if (isValid) {
-                sendFormWithEmailJS(contactForm);
+            if (validateForm(this)) {
+                sendFormWithEmailJS(this);
             }
         });
-        
-        function validateContactForm() {
-            let isValid = true;
-            const nameInput = document.getElementById('name');
-            const phoneInput = document.getElementById('phone');
-            const nameError = document.getElementById('name-error');
-            const phoneError = document.getElementById('phone-error');
-            const agreeCheckbox = document.getElementById('agree');
-            
-            // Валидация имени
-            if (nameInput.value.trim() === '') {
-                nameInput.classList.add('input-error');
-                nameError.style.display = 'block';
-                isValid = false;
-            } else {
-                nameInput.classList.remove('input-error');
-                nameError.style.display = 'none';
-            }
-            
-            // Валидация телефона
-            const phoneRegex = /^(\+7|8)[\s(]?\d{3}[)\s]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
-            if (!phoneRegex.test(phoneInput.value.trim())) {
-                phoneInput.classList.add('input-error');
-                phoneError.style.display = 'block';
-                isValid = false;
-            } else {
-                phoneInput.classList.remove('input-error');
-                phoneError.style.display = 'none';
-            }
-            
-            // Валидация согласия
-            if (!agreeCheckbox.checked) {
-                Swal.fire('Ошибка', 'Пожалуйста, подтвердите согласие на обработку персональных данных', 'error');
-                isValid = false;
-            }
-            
-            return isValid;
-        }
         
         // Кнопка "Наверх"
         const backToTopButton = document.getElementById('back-to-top');
@@ -1045,7 +1048,6 @@
                         behavior: 'smooth'
                     });
                     
-                    // Закрываем мобильное меню после клика
                     closeMobileMenu();
                 }
             });
@@ -1068,98 +1070,12 @@
             observer.observe(section);
         });
         
-        // Инициализация всех секций как видимых при загрузке (для отключенного JS)
+        // Инициализация всех секций как видимых при загрузке
         window.addEventListener('DOMContentLoaded', function() {
             sections.forEach(section => {
                 section.classList.add('visible');
             });
         });
     </script>
-
-<script>
-// Конфигурация
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgkxvXsC-rv7nc8ElYHP6SiIruYQa-TuHX5hhq3bImqtGu2Lk6d8hpLHph2LWJKH_1NQ/exec";
-
-// Функция для отправки данных в Google Sheets
-window.sendToGoogleSheet = async function(data) {
-    try {
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                name: data.name || "",
-                phone: data.phone || "",
-                message: data.message || "",
-                service: data.service || "",
-                date: new Date().toLocaleString("ru-RU"),
-                formType: data.formType || "Общий запрос"
-            }),
-        });
-        
-        const result = await response.json();
-        return result.result === "success";
-    } catch (error) {
-        console.error("Ошибка:", error);
-        return false;
-    }
-}
-
-// Функция для отправки формы через EmailJS и Google Sheets
-function sendFormWithEmailJS(formElement) {
-    // Показываем загрузку
-    Swal.fire({
-        title: 'Отправка...',
-        allowOutsideClick: false,
-        didOpen: () => {
-            Swal.showLoading();
-        }
-    });
-
-    // Собираем данные формы
-    const formData = {
-        name: formElement.querySelector("[name='name']").value.trim(),
-        phone: formElement.querySelector("[name='phone']").value.trim(),
-        message: formElement.querySelector("[name='message']")?.value.trim() || "-",
-        email: formElement.querySelector("[name='email']")?.value.trim() || "-",
-        service: formElement.querySelector("[name='service-type']")?.value || "Общий запрос",
-        plan: formElement.querySelector("[name='selected-tariff']")?.value || "Не указан",
-        formType: formElement.id === "modal-form" ? "Модальная форма" : "Основная форма"
-    };
-
-    // Отправляем в обе системы параллельно
-    const emailJSPromise = emailjs.sendForm("service_f0x3prq", "template_zbrybup", formElement);
-    const googleSheetsPromise = sendToGoogleSheet(formData);
-
-    // Обрабатываем результаты
-    Promise.all([emailJSPromise, googleSheetsPromise])
-        .then(([emailResult, googleSuccess]) => {
-            Swal.fire({
-                icon: 'success',
-                title: 'Спасибо!',
-                text: 'Ваша заявка принята! Мы свяжемся с вами в ближайшее время.',
-                confirmButtonColor: '#007bff'
-            });
-            formElement.reset();
-        })
-        .catch(error => {
-            console.error("Ошибка отправки:", error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Ошибка!',
-                text: 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже или свяжитесь с нами другим способом.',
-                confirmButtonColor: '#d33'
-            });
-        });
-}
-    
-// Функция валидации телефона
-function validatePhone(phone) {
-    const regex = /^(\+7|8)[\s(]?\d{3}[)\s]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
-    return regex.test(phone);
-}
-</script>
-
 </body>
 </html>
