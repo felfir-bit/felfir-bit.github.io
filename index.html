@@ -1077,5 +1077,27 @@
             });
         });
     </script>
+    <script type="text/javascript">
+  document.getElementById("myForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    
+    const formData = {
+      name: document.getElementById("name").value,
+      message: document.getElementById("message").value,
+      selected_tariff: document.getElementById("tariff").value
+    };
+
+    const templateParams = {
+      name: formData.name || "Гость",
+      time: new Date().toLocaleTimeString(),
+      message: formData.message || "Сообщение не указано",
+      ...(formData.selected_tariff && { selected_tariff: formData.selected_tariff })
+    };
+
+    emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", templateParams)
+      .then(() => alert("Успешно отправлено!"))
+      .catch(error => alert("Ошибка: " + error.message));
+  });
+</script>
 </body>
 </html>
