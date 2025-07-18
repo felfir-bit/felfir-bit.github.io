@@ -1117,6 +1117,7 @@ function sendFormWithEmailJS(formElement) {
         message: formElement.querySelector("[name='message']")?.value.trim() || "-",
         email: formElement.querySelector("[name='email']")?.value.trim() || "-",
         service: formElement.querySelector("[name='service-type']")?.value || "Общий запрос",
+        plan: formElement.querySelector("[name='selected-plan']")?.value || "Не указан",
         formType: formElement.id === "modal-form" ? "Модальная форма" : "Основная форма"
     };
 
@@ -1145,7 +1146,7 @@ function sendFormWithEmailJS(formElement) {
             });
         });
 }
-
+    
 // Функция валидации телефона
 function validatePhone(phone) {
     const regex = /^(\+7|8)[\s(]?\d{3}[)\s]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
