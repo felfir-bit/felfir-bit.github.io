@@ -1115,15 +1115,14 @@ function sendFormWithEmailJS(formElement) {
     });
 
     // Собираем данные формы
-    const formData = {
-        name: formElement.querySelector("[name='name']").value.trim(),
-        phone: formElement.querySelector("[name='phone']").value.trim(),
-        message: formElement.querySelector("[name='message']")?.value.trim() || "Не указано",
-        email: formElement.querySelector("[name='email']")?.value.trim() || "Не указано",
-        service: formElement.querySelector("[name='service-type']")?.value || "Общий запрос",
-        plan: formElement.querySelector("[name='selected-tariff']")?.value || "Не указан"
-    };
-
+   const formData = {
+    name: formElement.querySelector("[name='name']").value.trim(),
+    phone: formElement.querySelector("[name='phone']").value.trim(),
+    message: formElement.querySelector("[name='message']")?.value.trim() || "Нет сообщения",
+    email: formElement.querySelector("[name='email']")?.value.trim() || "Не указан",
+    service: formElement.querySelector("[name='service-type']")?.value || "Не указана услуга",
+    plan: formElement.querySelector("[name='selected-tariff']")?.value || "Без тарифа"
+};
     // Отправляем в EmailJS
     emailjs.send("service_f0x3prq", "template_zbrybup", formData)
         .then(() => {
