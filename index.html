@@ -1117,7 +1117,7 @@ function sendFormWithEmailJS(formElement) {
         message: formElement.querySelector("[name='message']")?.value.trim() || "-",
         email: formElement.querySelector("[name='email']")?.value.trim() || "-",
         service: formElement.querySelector("[name='service-type']")?.value || "Общий запрос",
-        plan: formElement.querySelector("[name='selected-plan']")?.value || "Не указан",
+        plan: formElement.querySelector("[name='selected-tariff']")?.value || "Не указан",
         formType: formElement.id === "modal-form" ? "Модальная форма" : "Основная форма"
     };
 
