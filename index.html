@@ -743,7 +743,7 @@
             
             <form id="modal-form" class="space-y-4">
                 <input type="hidden" id="service-type" name="service-type">
-                
+                <input type="hidden" id="selected-tariff" name="selected-tariff" value="">
                 <div>
                     <label for="modal-name" class="block mb-2 text-gray-700">Ваше имя *</label>
                     <input type="text" id="modal-name" name="name" 
@@ -840,6 +840,9 @@
             if (serviceType) {
                 modalTitle.textContent = `Заявка: ${serviceType}`;
                 serviceTypeInput.value = serviceType;
+                 if (serviceType.includes('Пакет:')) {
+            document.getElementById('selected-tariff').value = serviceType;
+        }
             } else {
                 modalTitle.textContent = 'Оставить заявку';
                 serviceTypeInput.value = '';
