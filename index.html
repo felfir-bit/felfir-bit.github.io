@@ -905,8 +905,8 @@ function sendFormWithEmailJS(formElement) {
 </script>
 
 
-function sendToGoogleSheet(data) {
-  // Вставьте правильный URL (без дублирования)
+// Объявляем функцию в глобальной области видимости
+window.sendToGoogleSheet = function(data) {
   const url = "https://script.google.com/macros/s/AKfycbzgkxvXsC-rv7nc8ElYHP6SiIruYQa-TuHX5hhq3bImqtGu2Lk6d8hpLHph2LWJKH_1NQ/exec" + 
     "?name=" + encodeURIComponent(data.name || "") +
     "&phone=" + encodeURIComponent(data.phone || "") +
@@ -917,6 +917,20 @@ function sendToGoogleSheet(data) {
     .then(() => console.log("Данные отправлены в Google Sheets!"))
     .catch(err => console.error("Ошибка:", err));
 }
+
+// Пример вызова функции
+document.getElementById('yourForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  
+  const formData = {
+    name: document.getElementById('name').value,
+    phone: document.getElementById('phone').value,
+    message: document.getElementById('message').value,
+    service: document.getElementById('service-type')?.value
+  };
+  
+  sendToGoogleSheet(formData);
+});
 
 </body>
 </html>
