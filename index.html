@@ -787,35 +787,36 @@
     </div>
 
     <!-- Модальное окно для услуг -->
-    <div id="service-modal" class="modal">
-        <div class="service-modal-content">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-2xl font-bold text-gray-800" id="service-modal-title">Услуга</h3>
-                <button onclick="closeServiceModal()" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            
-            <div id="service-modal-description" class="text-gray-700 mb-6">
-                Описание услуги
-            </div>
-            
-            <h4 class="text-xl font-bold text-gray-800 mb-4">Что включено:</h4>
-            <ul id="service-modal-features" class="feature-list mb-8">
-                <!-- Список возможностей будет добавлен через JS -->
-            </ul>
-            
-            <div class="flex justify-between items-center">
-                <button onclick="closeServiceModal()" class="text-blue-600 font-semibold hover:text-blue-800 transition mr-4">
-                    ← Вернуться к услугам
-                </button>
-                <button onclick="openModal(document.getElementById('service-modal-title').textContent)" 
-                        class="btn-primary text-white px-6 py-3 rounded-lg font-semibold">
-                    Оставить заявку
-                </button>
-            </div>
-        </div>
+<div id="service-modal" class="modal">
+  <div class="service-modal-content">
+    <div class="flex justify-between items-center mb-6">
+      <h3 class="text-2xl font-bold text-gray-800" id="service-modal-title">Услуга</h3>
+      <!-- Кнопка закрытия (крестик) -->
+      <button onclick="closeServiceModal()" class="text-gray-500 hover:text-gray-700">
+        <i class="fas fa-times"></i>
+      </button>
     </div>
+    
+    <!-- Описание услуги -->
+    <div id="service-modal-description" class="text-gray-700 mb-6"></div>
+    
+    <!-- Список возможностей -->
+    <ul id="service-modal-features" class="feature-list mb-8"></ul>
+    
+    <!-- Кнопка "Оставить заявку" (правильное место!) -->
+    <div class="flex justify-between items-center">
+      <button onclick="closeServiceModal()" class="text-blue-600 font-semibold hover:text-blue-800 transition mr-4">
+        ← Вернуться к услугам
+      </button>
+      <button 
+        onclick="closeServiceModal(); openModal(document.getElementById('service-modal-title').textContent);" 
+        class="btn-primary text-white px-6 py-3 rounded-lg font-semibold"
+      >
+        Оставить заявку
+      </button>
+    </div>
+  </div>
+</div>
 
     <!-- JavaScript -->
     <script>
@@ -836,7 +837,9 @@
         const modalTitle = document.getElementById('modal-title');
         const serviceTypeInput = document.getElementById('service-type');
         
-        function openModal(serviceType = '') {
+        
+            function openModal(serviceType = '') {
+  closeServiceModal();
             if (serviceType) {
                 modalTitle.textContent = `Заявка: ${serviceType}`;
                 serviceTypeInput.value = serviceType;
@@ -870,6 +873,7 @@
         const serviceModalFeatures = document.getElementById('service-modal-features');
         
         function openServiceModal(title, description, features) {
+            closeModal();
             serviceModalTitle.textContent = title;
             serviceModalDescription.textContent = description;
             
