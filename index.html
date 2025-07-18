@@ -999,6 +999,36 @@ function sendFormWithEmailJS(formElement) {
     return regex.test(phone);
   }
 </script>
+    <script>
+  // ВСТАВЬТЕ ЭТО ПЕРЕД ФУНКЦИЕЙ sendToGoogleSheets
+  const API_KEY = 'ВАШ_API_KEY'; // Замените на реальный ключ из Google Cloud Console
+  const SHEET_ID = '1lw1qkt60cyCWrfsKw36g47VElUUipxfI8qz4QCEKxQg'; // Ваш ID таблицы
+  const SHEET_NAME = 'Лист1'; // Если переименовали лист - укажите новое название
+
+  // Остальной код (функция sendToGoogleSheets и обработчики форм)
+  async function sendToGoogleSheets(data) {
+    try {
+      const response = await fetch(
+        `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}!A:A:append?valueInputOption=USER_ENTERED&key=${API_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            values: [[
+              new Date().toLocaleString('ru-RU'),
+              data.name,
+              data.phone,
+              data.email || '-',
+              data.service,
+              data.message || '-'
+            ]]
+          })
+        }
+      );
+      
+    }
+  }
+</script>
 
 </body>
 </html>
