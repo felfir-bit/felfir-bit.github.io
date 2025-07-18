@@ -905,32 +905,85 @@ function sendFormWithEmailJS(formElement) {
 </script>
 
 
-// Объявляем функцию в глобальной области видимости
-window.sendToGoogleSheet = function(data) {
-  const url = "https://script.google.com/macros/s/AKfycbzgkxvXsC-rv7nc8ElYHP6SiIruYQa-TuHX5hhq3bImqtGu2Lk6d8hpLHph2LWJKH_1NQ/exec" + 
-    "?name=" + encodeURIComponent(data.name || "") +
-    "&phone=" + encodeURIComponent(data.phone || "") +
-    "&message=" + encodeURIComponent(data.message || "") +
-    "&service=" + encodeURIComponent(data.service || "");
-  
-  fetch(url, { mode: 'no-cors' })
-    .then(() => console.log("Данные отправлены в Google Sheets!"))
-    .catch(err => console.error("Ошибка:", err));
-}
+<script>
+  // Конфигурация
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBWhqL0U4VZWUDQgoyxKKO0JvROYUXeiLFPRRuEXPPyq1bNZx2GuPKSZGbxXS-Wzjh/exec";
 
-// Пример вызова функции
-document.getElementById('yourForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  
-  const formData = {
-    name: document.getElementById('name').value,
-    phone: document.getElementById('phone').value,
-    message: document.getElementById('message').value,
-    service: document.getElementById('service-type')?.value
-  };
-  
-  sendToGoogleSheet(formData);
-});
+  // Функция отправки в Google Sheets
+  async function sendToGoogleSheets(data) {
+    try {
+      const response = await fetch(GOOGLE_SCRIPT_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+      
+      const result = await response.json();
+      if (result.result === "success") {
+        Swal.fire({
+          icon: 'success',
+          title: 'Спасибо!',
+          text: 'Ваша заявка принята! Мы свяжемся с вами в ближайшее время.',
+          confirmButtonColor: '#007bff'
+        });
+      } else {
+        throw new Error(result.error);
+      }
+    } catch (error) {
+      console.error("Ошибка:", error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Ошибка!',
+        text: 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже.',
+        confirmButtonColor: '#d33'
+      });
+    }
+  }
+
+  // Обработчик основной формы
+  document.getElementById('contact-form')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = {
+      name: this.querySelector('[name="name"]').value.trim(),
+      phone: this.querySelector('[name="phone"]').value.trim(),
+      message: this.querySelector('[name="message"]')?.value.trim() || "-",
+      service: "Общий запрос",
+      date: new Date().toLocaleString("ru-RU"),
+      formType: "Основная форма"
+    };
+    
+    sendToGoogleSheets(formData);
+    this.reset();
+  });
+
+  // Обработчик модальной формы
+  document.getElementById('modal-form')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = {
+      name: this.querySelector('[name="name"]').value.trim(),
+      phone: this.querySelector('[name="phone"]').value.trim(),
+      email: this.querySelector('[name="email"]')?.value.trim() || "-",
+      message: this.querySelector('[name="message"]')?.value.trim() || "-",
+      service: this.querySelector('[name="service-type"]').value || "Общий запрос",
+      date: new Date().toLocaleString("ru-RU"),
+      formType: "Модальная форма"
+    };
+    
+    sendToGoogleSheets(formData);
+    closeModal();
+    this.reset();
+  });
+
+  // Валидация телефона (добавьте в существующий скрипт)
+  function validatePhone(phone) {
+    const regex = /^(\+7|8)[\s(]?\d{3}[)\s]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
+    return regex.test(phone);
+  }
+</script>
 
 </body>
 </html>
