@@ -17,7 +17,7 @@
     <meta itemprop="name" content="AIqon - Автоматизация бизнеса и прием лидов">
     <meta itemprop="description" content="Профессиональная автоматизация бизнес-процессов в Казахстане">
     
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Кастомные стили */
@@ -905,54 +905,18 @@ function sendFormWithEmailJS(formElement) {
 </script>
 
 
-async function sendToGoogleSheet(formData) {
-  const scriptUrl = "https://script.google.com/macros/s/AKfycbytKzZbUe9YTiN-pwlvzVE7NPkHGAsqKvp7Hn7n4fr3-UH5sAuAsHFq4d4EIyj3OHQ4RQ/exec";
+function sendToGoogleSheet(data) {
+  // Вставьте правильный URL (без дублирования)
+  const url = "https://script.google.com/macros/s/AKfycbzgkxvXsC-rv7nc8ElYHP6SiIruYQa-TuHX5hhq3bImqtGu2Lk6d8hpLHph2LWJKH_1NQ/exec" + 
+    "?name=" + encodeURIComponent(data.name || "") +
+    "&phone=" + encodeURIComponent(data.phone || "") +
+    "&message=" + encodeURIComponent(data.message || "") +
+    "&service=" + encodeURIComponent(data.service || "");
   
-  try {
-    const response = await fetch(scriptUrl, {
-      method: "POST",
-      mode: 'no-cors',
-      body: JSON.stringify({
-        name: formData.name,
-        phone: formData.phone,
-        message: formData.message || "-",
-        service: document.getElementById('service-type')?.value || "Общая заявка"
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-    
-    console.log('Данные отправлены в Google Sheets');
-    return true;
-    
-  } catch (error) {
-    console.error('Ошибка при отправке:', error);
-    return false;
-  }
+  fetch(url, { mode: 'no-cors' })
+    .then(() => console.log("Данные отправлены в Google Sheets!"))
+    .catch(err => console.error("Ошибка:", err));
 }
-
-// Обновите обработчики форм (пример для модальной формы):
-modalForm.addEventListener('submit', async function(e) {
-  e.preventDefault();
-  
-  if (/* ваша проверка валидности */) {
-    const formData = {
-      name: modalName.value,
-      phone: modalPhone.value,
-      message: modalMessage.value
-    };
-    
-    // Параллельная отправка в EmailJS и Google Sheets
-    await Promise.all([
-      sendFormWithEmailJS(modalForm),
-      sendToGoogleSheet(formData)
-    ]);
-    
-    closeModal();
-    Swal.fire('Успешно!', 'Заявка отправлена', 'success');
-  }
-});
 
 </body>
 </html>
