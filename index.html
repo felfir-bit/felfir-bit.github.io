@@ -77,6 +77,11 @@
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
         }
         
+        .price-card:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
         .back-to-top {
             position: fixed;
             bottom: 30px;
@@ -123,6 +128,17 @@
             animation: modalFadeIn 0.3s ease;
         }
         
+        .service-modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalFadeIn 0.3s ease;
+        }
+        
         @keyframes modalFadeIn {
             from {
                 opacity: 0;
@@ -144,6 +160,32 @@
             margin-top: 5px;
             display: none;
         }
+        
+        .price-tag {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #007bff;
+            margin: 20px 0;
+        }
+        
+        .feature-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-list li:before {
+            content: "✓";
+            color: #007bff;
+            margin-right: 10px;
+            font-weight: bold;
+        }
     </style>
 
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -152,7 +194,6 @@
     emailjs.init("EM5fcMMw75mveebqX");
   })();
 </script>
-
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -172,7 +213,7 @@
                 <a href="#about" class="nav-link text-gray-700 hover:text-blue-600 transition">О нас</a>
                 <a href="#advantages" class="nav-link text-gray-700 hover:text-blue-600 transition">Преимущества</a>
                 <a href="#services" class="nav-link text-gray-700 hover:text-blue-600 transition">Услуги</a>
-                <a href="#cases" class="nav-link text-gray-700 hover:text-blue-600 transition">Кейсы</a>
+                <a href="#pricing" class="nav-link text-gray-700 hover:text-blue-600 transition">Прайс-лист</a>
                 <a href="#contact" class="nav-link text-gray-700 hover:text-blue-600 transition">Контакты</a>
             </div>
             
@@ -192,7 +233,7 @@
                 <a href="#about" class="text-gray-700 hover:text-blue-600 py-2" onclick="closeMobileMenu()">О нас</a>
                 <a href="#advantages" class="text-gray-700 hover:text-blue-600 py-2" onclick="closeMobileMenu()">Преимущества</a>
                 <a href="#services" class="text-gray-700 hover:text-blue-600 py-2" onclick="closeMobileMenu()">Услуги</a>
-                <a href="#cases" class="text-gray-700 hover:text-blue-600 py-2" onclick="closeMobileMenu()">Кейсы</a>
+                <a href="#pricing" class="text-gray-700 hover:text-blue-600 py-2" onclick="closeMobileMenu()">Прайс-лист</a>
                 <a href="#contact" class="text-gray-700 hover:text-blue-600 py-2" onclick="closeMobileMenu()">Контакты</a>
                 <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition w-full">
                     Оставить заявку
@@ -358,7 +399,15 @@
                                 <span class="text-gray-600">Обучение сотрудников</span>
                             </li>
                         </ul>
-                        <button onclick="openModal('Внедрение CRM-систем')" class="text-blue-600 font-semibold hover:text-blue-800 transition">
+                        <button onclick="openServiceModal('Внедрение CRM-систем', 'Мы предлагаем комплексное внедрение CRM-систем для автоматизации вашего бизнеса. Наши решения включают в себя:', [
+                            'Анализ бизнес-процессов и постановка задач',
+                            'Выбор оптимальной CRM-системы под ваш бизнес',
+                            'Настройка воронки продаж и этапов сделок',
+                            'Интеграция с сайтом, телефонией и почтой',
+                            'Настройка автоматических уведомлений и напоминаний',
+                            'Обучение ваших сотрудников работе с системой',
+                            'Техническая поддержка после внедрения'
+                        ])" class="text-blue-600 font-semibold hover:text-blue-800 transition">
                             Узнать подробнее →
                         </button>
                     </div>
@@ -386,7 +435,15 @@
                                 <span class="text-gray-600">Мультиязычная поддержка</span>
                             </li>
                         </ul>
-                        <button onclick="openModal('Разработка чат-ботов')" class="text-blue-600 font-semibold hover:text-blue-800 transition">
+                        <button onclick="openServiceModal('Разработка чат-ботов', 'Наши чат-боты помогают автоматизировать общение с клиентами и увеличивать конверсию. Основные возможности:', [
+                            'Автоматическая обработка 80% типовых запросов',
+                            'Интеграция с CRM и другими бизнес-системами',
+                            'Мультиязычная поддержка клиентов',
+                            'Автоматическая запись на услуги и консультации',
+                            'Сбор обратной связи и оценка качества',
+                            'Персональные рекомендации для клиентов',
+                            'Аналитика эффективности бота'
+                        ])" class="text-blue-600 font-semibold hover:text-blue-800 transition">
                             Узнать подробнее →
                         </button>
                     </div>
@@ -414,7 +471,15 @@
                                 <span class="text-gray-600">Автоматические отчеты</span>
                             </li>
                         </ul>
-                        <button onclick="openModal('Сквозная аналитика')" class="text-blue-600 font-semibold hover:text-blue-800 transition">
+                        <button onclick="openServiceModal('Сквозная аналитика', 'Сквозная аналитика позволяет точно измерить эффективность каждого маркетингового канала. Мы предлагаем:', [
+                            'Настройка отслеживания всех каналов привлечения клиентов',
+                            'Интеграция с рекламными системами (Google Ads, Facebook и др.)',
+                            'Анализ ROI по каждому каналу и кампании',
+                            'Автоматические отчеты и дашборды',
+                            'Выявление самых эффективных каналов привлечения',
+                            'Рекомендации по оптимизации рекламного бюджета',
+                            'Прогнозирование продаж на основе данных'
+                        ])" class="text-blue-600 font-semibold hover:text-blue-800 transition">
                             Узнать подробнее →
                         </button>
                     </div>
@@ -423,65 +488,114 @@
         </div>
     </section>
 
-    <!-- Кейсы -->
-    <section id="cases" class="py-16 bg-gray-50 section">
+    <!-- Прайс-лист -->
+    <section id="pricing" class="py-16 bg-gray-50 section">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-800 mb-4">Наши кейсы</h2>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Прайс-лист</h2>
                 <div class="w-20 h-1 bg-blue-600 mx-auto"></div>
+                <p class="text-gray-600 max-w-2xl mx-auto mt-4">Выберите подходящий пакет автоматизации для вашего бизнеса. Все цены указаны в тенге.</p>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Кейс 1 -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="h-48 bg-gray-200 flex items-center justify-center">
-                        <img src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-                             alt="Интернет-магазин" 
-                             class="w-full h-full object-cover">
-                    </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Тариф 1 -->
+                <div class="price-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
                     <div class="p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-xl font-bold">Интернет-магазин электроники</h3>
-                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">CRM</span>
-                        </div>
-                        <p class="text-gray-600 mb-4">Внедрили CRM-систему для автоматизации обработки заказов и работы с клиентами.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">+40% к продажам</span>
-                            <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">-30% времени на обработку</span>
-                        </div>
-                        <button onclick="openModal('Кейс: Интернет-магазин электроники')" class="text-blue-600 font-semibold hover:text-blue-800 transition">
-                            Подробнее о кейсе →
+                        <h3 class="text-xl font-bold text-center mb-2">Базовый</h3>
+                        <div class="price-tag text-center">250 000 ₸</div>
+                        <p class="text-center text-gray-500 mb-6">Срок реализации: до 7 дней</p>
+                        
+                        <ul class="feature-list mb-6">
+                            <li>Настройка базовой CRM</li>
+                            <li>Автоматизация входящих заявок</li>
+                            <li>1 интеграция (сайт или телефония)</li>
+                            <li>Базовые отчеты</li>
+                            <li>Обучение 1 сотрудника</li>
+                        </ul>
+                        
+                        <button onclick="openModal('Пакет: Базовый')" class="w-full btn-primary text-white px-4 py-3 rounded-lg font-semibold">
+                            Заказать
                         </button>
                     </div>
                 </div>
                 
-                <!-- Кейс 2 -->
-                <div class="bg-white rounded-lg shadow-md overflow-hidden">
-                    <div class="h-48 bg-gray-200 flex items-center justify-center">
-                        <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-                             alt="Строительная компания" 
-                             class="w-full h-full object-cover">
-                    </div>
+                <!-- Тариф 2 -->
+                <div class="price-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
                     <div class="p-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-xl font-bold">Строительная компания</h3>
-                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">Чат-бот</span>
+                        <h3 class="text-xl font-bold text-center mb-2">Стандарт</h3>
+                        <div class="price-tag text-center">400 000 ₸</div>
+                        <p class="text-center text-gray-500 mb-6">Срок реализации: около 7 дней</p>
+                        
+                        <ul class="feature-list mb-6">
+                            <li>Расширенная настройка CRM</li>
+                            <li>Автоматизация входящих и исходящих заявок</li>
+                            <li>3 интеграции (сайт, телефония, почта)</li>
+                            <li>Расширенные отчеты</li>
+                            <li>Обучение 3 сотрудников</li>
+                            <li>Телеграм-бот для уведомлений</li>
+                        </ul>
+                        
+                        <button onclick="openModal('Пакет: Стандарт')" class="w-full btn-primary text-white px-4 py-3 rounded-lg font-semibold">
+                            Заказать
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Тариф 3 -->
+                <div class="price-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                    <div class="p-6 relative">
+                        <div class="absolute top-0 right-0 bg-blue-600 text-white px-3 py-1 text-sm font-bold rounded-bl-lg">
+                            Популярный
                         </div>
-                        <p class="text-gray-600 mb-4">Разработали чат-бота для Telegram, который обрабатывает 80% запросов клиентов автоматически.</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">+35% конверсии</span>
-                            <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">-50% нагрузки на менеджеров</span>
-                        </div>
-                        <button onclick="openModal('Кейс: Строительная компания')" class="text-blue-600 font-semibold hover:text-blue-800 transition">
-                            Подробнее о кейсе →
+                        <h3 class="text-xl font-bold text-center mb-2">Профессиональный</h3>
+                        <div class="price-tag text-center">650 000 ₸</div>
+                        <p class="text-center text-gray-500 mb-6">Срок реализации: 7-14 дней</p>
+                        
+                        <ul class="feature-list mb-6">
+                            <li>Полная настройка CRM под ваш бизнес</li>
+                            <li>Автоматизация всех процессов продаж</li>
+                            <li>5+ интеграций</li>
+                            <li>Сквозная аналитика</li>
+                            <li>Обучение неограниченного числа сотрудников</li>
+                            <li>Чат-бот для обработки заявок</li>
+                            <li>Техподдержка 1 месяц</li>
+                        </ul>
+                        
+                        <button onclick="openModal('Пакет: Профессиональный')" class="w-full btn-primary text-white px-4 py-3 rounded-lg font-semibold">
+                            Заказать
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Тариф 4 -->
+                <div class="price-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-center mb-2">Премиум</h3>
+                        <div class="price-tag text-center">900 000 ₸</div>
+                        <p class="text-center text-gray-500 mb-6">Срок реализации: 2+ недели</p>
+                        
+                        <ul class="feature-list mb-6">
+                            <li>Индивидуальная CRM-разработка</li>
+                            <li>Полная автоматизация бизнес-процессов</li>
+                            <li>Неограниченное число интеграций</li>
+                            <li>Сквозная аналитика с прогнозированием</li>
+                            <li>Мультиязычные чат-боты</li>
+                            <li>Обучение и сопровождение</li>
+                            <li>Техподдержка 3 месяца</li>
+                            <li>Индивидуальные доработки</li>
+                        </ul>
+                        
+                        <button onclick="openModal('Пакет: Премиум')" class="w-full btn-primary text-white px-4 py-3 rounded-lg font-semibold">
+                            Заказать
                         </button>
                     </div>
                 </div>
             </div>
             
             <div class="text-center mt-12">
-                <button onclick="openModal('Запрос на кейсы')" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold">
-                    Получить больше кейсов
+                <p class="text-gray-600 mb-4">Не нашли подходящий вариант? Мы можем разработать индивидуальное решение для вашего бизнеса.</p>
+                <button onclick="openModal('Индивидуальное решение')" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold">
+                    Обсудить индивидуальный проект
                 </button>
             </div>
         </div>
@@ -498,18 +612,18 @@
                 
                 <form id="contact-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="name" class="block mb-2 font-medium">Ваше имя</label>
+                        <label for="name" class="block mb-2 font-medium">Ваше имя *</label>
                         <input type="text" id="name" name="name" 
                                class="w-full px-4 py-3 rounded-lg bg-blue-800 border border-blue-600 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent placeholder-blue-400"
-                               placeholder="Иван Иванов">
+                               placeholder="Иван Иванов" required>
                         <div id="name-error" class="error-message">Пожалуйста, введите ваше имя</div>
                     </div>
                     
                     <div>
-                        <label for="phone" class="block mb-2 font-medium">Телефон</label>
+                        <label for="phone" class="block mb-2 font-medium">Телефон *</label>
                         <input type="tel" id="phone" name="phone" 
                                class="w-full px-4 py-3 rounded-lg bg-blue-800 border border-blue-600 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent placeholder-blue-400"
-                               placeholder="+7 (999) 123-45-67">
+                               placeholder="+7 (999) 123-45-67" required>
                         <div id="phone-error" class="error-message">Пожалуйста, введите корректный номер телефона</div>
                     </div>
                     
@@ -521,8 +635,8 @@
                     </div>
                     
                     <div class="md:col-span-2 flex items-center">
-                        <input type="checkbox" id="agree" name="agree" class="mr-3">
-                        <label for="agree" class="text-sm opacity-90">Я согласен на обработку персональных данных</label>
+                        <input type="checkbox" id="agree" name="agree" class="mr-3" required>
+                        <label for="agree" class="text-sm opacity-90">Я согласен на обработку персональных данных *</label>
                     </div>
                     
                     <div class="md:col-span-2 text-center">
@@ -566,10 +680,10 @@
                 <div>
                     <h3 class="text-lg font-semibold mb-4">Услуги</h3>
                     <ul class="space-y-2">
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Внедрение CRM</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Чат-боты</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Сквозная аналитика</a></li>
-                        <li><a href="#" class="text-gray-400 hover:text-white transition">Интеграции</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition">Внедрение CRM</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition">Чат-боты</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition">Сквозная аналитика</a></li>
+                        <li><a href="#services" class="text-gray-400 hover:text-white transition">Интеграции</a></li>
                     </ul>
                 </div>
                 
@@ -578,7 +692,7 @@
                     <ul class="space-y-2">
                         <li><a href="#about" class="text-gray-400 hover:text-white transition">О нас</a></li>
                         <li><a href="#advantages" class="text-gray-400 hover:text-white transition">Преимущества</a></li>
-                        <li><a href="#cases" class="text-gray-400 hover:text-white transition">Кейсы</a></li>
+                        <li><a href="#pricing" class="text-gray-400 hover:text-white transition">Прайс-лист</a></li>
                         <li><a href="#contact" class="text-gray-400 hover:text-white transition">Контакты</a></li>
                     </ul>
                 </div>
@@ -617,7 +731,7 @@
         <i class="fas fa-arrow-up"></i>
     </div>
 
-    <!-- Модальное окно -->
+    <!-- Модальное окно для заявки -->
     <div id="modal" class="modal">
         <div class="modal-content">
             <div class="flex justify-between items-center mb-6">
@@ -631,18 +745,18 @@
                 <input type="hidden" id="service-type" name="service-type">
                 
                 <div>
-                    <label for="modal-name" class="block mb-2 text-gray-700">Ваше имя</label>
+                    <label for="modal-name" class="block mb-2 text-gray-700">Ваше имя *</label>
                     <input type="text" id="modal-name" name="name" 
                            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                           placeholder="Иван Иванов">
+                           placeholder="Иван Иванов" required>
                     <div id="modal-name-error" class="error-message">Пожалуйста, введите ваше имя</div>
                 </div>
                 
                 <div>
-                    <label for="modal-phone" class="block mb-2 text-gray-700">Телефон</label>
+                    <label for="modal-phone" class="block mb-2 text-gray-700">Телефон *</label>
                     <input type="tel" id="modal-phone" name="phone" 
                            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                           placeholder="+7 (999) 123-45-67">
+                           placeholder="+7 (999) 123-45-67" required>
                     <div id="modal-phone-error" class="error-message">Пожалуйста, введите корректный номер телефона</div>
                 </div>
                 
@@ -661,14 +775,45 @@
                 </div>
                 
                 <div class="flex items-center">
-                    <input type="checkbox" id="modal-agree" name="agree" class="mr-3">
-                    <label for="modal-agree" class="text-sm text-gray-700">Я согласен на обработку персональных данных</label>
+                    <input type="checkbox" id="modal-agree" name="agree" class="mr-3" required>
+                    <label for="modal-agree" class="text-sm text-gray-700">Я согласен на обработку персональных данных *</label>
                 </div>
                 
                 <button type="submit" class="w-full btn-primary text-white px-6 py-3 rounded-lg font-semibold">
                     Отправить заявку
                 </button>
             </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно для услуг -->
+    <div id="service-modal" class="modal">
+        <div class="service-modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-gray-800" id="service-modal-title">Услуга</h3>
+                <button onclick="closeServiceModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div id="service-modal-description" class="text-gray-700 mb-6">
+                Описание услуги
+            </div>
+            
+            <h4 class="text-xl font-bold text-gray-800 mb-4">Что включено:</h4>
+            <ul id="service-modal-features" class="feature-list mb-8">
+                <!-- Список возможностей будет добавлен через JS -->
+            </ul>
+            
+            <div class="flex justify-between items-center">
+                <button onclick="closeServiceModal()" class="text-blue-600 font-semibold hover:text-blue-800 transition mr-4">
+                    ← Вернуться к услугам
+                </button>
+                <button onclick="openModal(document.getElementById('service-modal-title').textContent)" 
+                        class="btn-primary text-white px-6 py-3 rounded-lg font-semibold">
+                    Оставить заявку
+                </button>
+            </div>
         </div>
     </div>
 
@@ -686,14 +831,14 @@
             mobileMenu.classList.add('hidden');
         }
         
-        // Модальное окно
+        // Модальное окно заявки
         const modal = document.getElementById('modal');
         const modalTitle = document.getElementById('modal-title');
         const serviceTypeInput = document.getElementById('service-type');
         
         function openModal(serviceType = '') {
             if (serviceType) {
-                modalTitle.textContent = `Заявка на услугу: ${serviceType}`;
+                modalTitle.textContent = `Заявка: ${serviceType}`;
                 serviceTypeInput.value = serviceType;
             } else {
                 modalTitle.textContent = 'Оставить заявку';
@@ -715,10 +860,42 @@
             document.getElementById('modal-phone-error').style.display = 'none';
         }
         
-        // Закрытие модального окна при клике вне его
+        // Модальное окно услуги
+        const serviceModal = document.getElementById('service-modal');
+        const serviceModalTitle = document.getElementById('service-modal-title');
+        const serviceModalDescription = document.getElementById('service-modal-description');
+        const serviceModalFeatures = document.getElementById('service-modal-features');
+        
+        function openServiceModal(title, description, features) {
+            serviceModalTitle.textContent = title;
+            serviceModalDescription.textContent = description;
+            
+            // Очищаем предыдущие элементы
+            serviceModalFeatures.innerHTML = '';
+            
+            // Добавляем новые элементы
+            features.forEach(feature => {
+                const li = document.createElement('li');
+                li.textContent = feature;
+                serviceModalFeatures.appendChild(li);
+            });
+            
+            serviceModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeServiceModal() {
+            serviceModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Закрытие модальных окон при клике вне их
         window.addEventListener('click', function(event) {
             if (event.target === modal) {
                 closeModal();
+            }
+            if (event.target === serviceModal) {
+                closeServiceModal();
             }
         });
         
@@ -728,11 +905,21 @@
         modalForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
+            let isValid = validateModalForm();
+            
+            if (isValid) {
+                sendFormWithEmailJS(modalForm);
+                closeModal();
+            }
+        });
+        
+        function validateModalForm() {
             let isValid = true;
             const nameInput = document.getElementById('modal-name');
             const phoneInput = document.getElementById('modal-phone');
             const nameError = document.getElementById('modal-name-error');
             const phoneError = document.getElementById('modal-phone-error');
+            const agreeCheckbox = document.getElementById('modal-agree');
             
             // Валидация имени
             if (nameInput.value.trim() === '') {
@@ -756,17 +943,13 @@
             }
             
             // Валидация согласия
-            if (!document.getElementById('modal-agree').checked) {
-                alert('Пожалуйста, подтвердите согласие на обработку персональных данных');
+            if (!agreeCheckbox.checked) {
+                Swal.fire('Ошибка', 'Пожалуйста, подтвердите согласие на обработку персональных данных', 'error');
                 isValid = false;
             }
             
-            if (isValid) {
-                // Здесь можно отправить форму (AJAX или обычным способом)
-                sendFormWithEmailJS(modalForm);
-                closeModal();
-            }
-        });
+            return isValid;
+        }
         
         // Валидация основной формы
         const contactForm = document.getElementById('contact-form');
@@ -774,11 +957,20 @@
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
+            let isValid = validateContactForm();
+            
+            if (isValid) {
+                sendFormWithEmailJS(contactForm);
+            }
+        });
+        
+        function validateContactForm() {
             let isValid = true;
             const nameInput = document.getElementById('name');
             const phoneInput = document.getElementById('phone');
             const nameError = document.getElementById('name-error');
             const phoneError = document.getElementById('phone-error');
+            const agreeCheckbox = document.getElementById('agree');
             
             // Валидация имени
             if (nameInput.value.trim() === '') {
@@ -802,16 +994,13 @@
             }
             
             // Валидация согласия
-            if (!document.getElementById('agree').checked) {
-                alert('Пожалуйста, подтвердите согласие на обработку персональных данных');
+            if (!agreeCheckbox.checked) {
+                Swal.fire('Ошибка', 'Пожалуйста, подтвердите согласие на обработку персональных данных', 'error');
                 isValid = false;
             }
             
-            if (isValid) {
-                // Здесь можно отправить форму (AJAX или обычным способом)
-                sendFormWithEmailJS(contactForm);
-            }
-        });
+            return isValid;
+        }
         
         // Кнопка "Наверх"
         const backToTopButton = document.getElementById('back-to-top');
@@ -845,6 +1034,9 @@
                         top: targetElement.offsetTop - 80,
                         behavior: 'smooth'
                     });
+                    
+                    // Закрываем мобильное меню после клика
+                    closeMobileMenu();
                 }
             });
         });
@@ -875,129 +1067,87 @@
     </script>
 
 <script>
-// Отправка формы через EmailJS + SweetAlert уведомления
+// Конфигурация
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgkxvXsC-rv7nc8ElYHP6SiIruYQa-TuHX5hhq3bImqtGu2Lk6d8hpLHph2LWJKH_1NQ/exec";
+
+// Функция для отправки данных в Google Sheets
+window.sendToGoogleSheet = async function(data) {
+    try {
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name: data.name || "",
+                phone: data.phone || "",
+                message: data.message || "",
+                service: data.service || "",
+                date: new Date().toLocaleString("ru-RU"),
+                formType: data.formType || "Общий запрос"
+            }),
+        });
+        
+        const result = await response.json();
+        return result.result === "success";
+    } catch (error) {
+        console.error("Ошибка:", error);
+        return false;
+    }
+}
+
+// Функция для отправки формы через EmailJS и Google Sheets
 function sendFormWithEmailJS(formElement) {
-    emailjs.sendForm("service_f0x3prq", "template_zbrybup", formElement)
-        .then(function() {
+    // Показываем загрузку
+    Swal.fire({
+        title: 'Отправка...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    // Собираем данные формы
+    const formData = {
+        name: formElement.querySelector("[name='name']").value.trim(),
+        phone: formElement.querySelector("[name='phone']").value.trim(),
+        message: formElement.querySelector("[name='message']")?.value.trim() || "-",
+        email: formElement.querySelector("[name='email']")?.value.trim() || "-",
+        service: formElement.querySelector("[name='service-type']")?.value || "Общий запрос",
+        formType: formElement.id === "modal-form" ? "Модальная форма" : "Основная форма"
+    };
+
+    // Отправляем в обе системы параллельно
+    const emailJSPromise = emailjs.sendForm("service_f0x3prq", "template_zbrybup", formElement);
+    const googleSheetsPromise = sendToGoogleSheet(formData);
+
+    // Обрабатываем результаты
+    Promise.all([emailJSPromise, googleSheetsPromise])
+        .then(([emailResult, googleSuccess]) => {
             Swal.fire({
                 icon: 'success',
                 title: 'Спасибо!',
-                text: 'Заявка успешно отправлена.',
+                text: 'Ваша заявка принята! Мы свяжемся с вами в ближайшее время.',
                 confirmButtonColor: '#007bff'
             });
-            const formData = {
-        name: formElement.querySelector("[name='name']").value,
-        phone: formElement.querySelector("[name='phone']").value,
-        message: formElement.querySelector("[name='message']")?.value || "-"
-    };
-    sendToGoogleSheet(formData);
-    formElement.reset();
-        }, function(error) {
+            formElement.reset();
+        })
+        .catch(error => {
+            console.error("Ошибка отправки:", error);
             Swal.fire({
                 icon: 'error',
                 title: 'Ошибка!',
-                text: 'Ошибка отправки формы. Попробуйте позже.',
+                text: 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже или свяжитесь с нами другим способом.',
                 confirmButtonColor: '#d33'
             });
-            console.error("EmailJS Error:", error);
         });
 }
-</script>
 
-
-<script>
-  // Конфигурация
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgkxvXsC-rv7nc8ElYHP6SiIruYQa-TuHX5hhq3bImqtGu2Lk6d8hpLHph2LWJKH_1NQ/exec";
-
-  // Объявляем функцию в глобальной области видимости
-  window.sendToGoogleSheet = async function(data) {
-    try {
-      const response = await fetch(GOOGLE_SCRIPT_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: data.name || "",
-          phone: data.phone || "",
-          message: data.message || "",
-          service: data.service || "",
-          date: new Date().toLocaleString("ru-RU"),
-          formType: data.formType || "Общий запрос"
-        }),
-      });
-      
-      const result = await response.json();
-      if (result.result === "success") {
-        Swal.fire({
-          icon: 'success',
-          title: 'Спасибо!',
-          text: 'Ваша заявка принята! Мы свяжемся с вами в ближайшее время.',
-          confirmButtonColor: '#007bff'
-        });
-      } else {
-        throw new Error(result.error);
-      }
-    } catch (error) {
-      console.error("Ошибка:", error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Ошибка!',
-        text: 'Произошла ошибка при отправке формы. Пожалуйста, попробуйте позже.',
-        confirmButtonColor: '#d33'
-      });
-    }
-  }
-
-  // Обработчик основной формы
-  document.getElementById('contact-form')?.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = {
-      name: this.querySelector('[name="name"]').value.trim(),
-      phone: this.querySelector('[name="phone"]').value.trim(),
-      message: this.querySelector('[name="message"]')?.value.trim() || "-",
-      service: "Общий запрос",
-      formType: "Основная форма"
-    };
-    
-    if (!formData.name || !validatePhone(formData.phone)) {
-      Swal.fire('Ошибка', 'Пожалуйста, заполните все обязательные поля правильно', 'error');
-      return;
-    }
-    
-    sendToGoogleSheet(formData);
-    this.reset();
-  });
-
-  // Обработчик модальной формы
-  document.getElementById('modal-form')?.addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = {
-      name: this.querySelector('[name="name"]').value.trim(),
-      phone: this.querySelector('[name="phone"]').value.trim(),
-      email: this.querySelector('[name="email"]')?.value.trim() || "-",
-      message: this.querySelector('[name="message"]')?.value.trim() || "-",
-      service: this.querySelector('[name="service-type"]').value || "Общий запрос",
-      formType: "Модальная форма"
-    };
-    
-    if (!formData.name || !validatePhone(formData.phone)) {
-      Swal.fire('Ошибка', 'Пожалуйста, заполните все обязательные поля правильно', 'error');
-      return;
-    }
-    
-    sendToGoogleSheet(formData);
-    closeModal();
-    this.reset();
-  });
-
-  // Функция валидации телефона
-  function validatePhone(phone) {
+// Функция валидации телефона
+function validatePhone(phone) {
     const regex = /^(\+7|8)[\s(]?\d{3}[)\s]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
     return regex.test(phone);
-  }
+}
 </script>
 
 </body>
