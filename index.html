@@ -905,21 +905,54 @@ function sendFormWithEmailJS(formElement) {
 </script>
 
 
-<script>
-function sendToGoogleSheet(data) {
-  fetch("https://script.google.com/macros/s/AKfycbyBWhqL0U4VZWUDQgoyxKKO0JvROYUXeiLFPRRuEXPPyq1bNZx2GuPKSZGbxXS-Wzjh/exec", {
-    method: "POST",
-    body: JSON.stringify(data),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  }).then(res => {
-    console.log("Данные отправлены в Google Таблицу");
-  }).catch(err => {
-    console.error("Ошибка при отправке в таблицу:", err);
-  });
+async function sendToGoogleSheet(formData) {
+  const scriptUrl = "https://script.google.com/macros/s/AKfycbytKzZbUe9YTiN-pwlvzVE7NPkHGAsqKvp7Hn7n4fr3-UH5sAuAsHFq4d4EIyj3OHQ4RQ/exec";
+  
+  try {
+    const response = await fetch(scriptUrl, {
+      method: "POST",
+      mode: 'no-cors',
+      body: JSON.stringify({
+        name: formData.name,
+        phone: formData.phone,
+        message: formData.message || "-",
+        service: document.getElementById('service-type')?.value || "Общая заявка"
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    console.log('Данные отправлены в Google Sheets');
+    return true;
+    
+  } catch (error) {
+    console.error('Ошибка при отправке:', error);
+    return false;
+  }
 }
-</script>
+
+// Обновите обработчики форм (пример для модальной формы):
+modalForm.addEventListener('submit', async function(e) {
+  e.preventDefault();
+  
+  if (/* ваша проверка валидности */) {
+    const formData = {
+      name: modalName.value,
+      phone: modalPhone.value,
+      message: modalMessage.value
+    };
+    
+    // Параллельная отправка в EmailJS и Google Sheets
+    await Promise.all([
+      sendFormWithEmailJS(modalForm),
+      sendToGoogleSheet(formData)
+    ]);
+    
+    closeModal();
+    Swal.fire('Успешно!', 'Заявка отправлена', 'success');
+  }
+});
 
 </body>
 </html>
