@@ -743,7 +743,7 @@
             
             <form id="modal-form" class="space-y-4">
                 <input type="hidden" id="service-type" name="service-type">
-                <input type="hidden" id="selected-tariff" name="selected-tariff" value="">
+               <input type="hidden" id="selected_tariff" name="selected_tariff" value="Не выбран">
                 <div>
                     <label for="modal-name" class="block mb-2 text-gray-700">Ваше имя *</label>
                     <input type="text" id="modal-name" name="name" 
@@ -843,9 +843,12 @@
             if (serviceType) {
                 modalTitle.textContent = `Заявка: ${serviceType}`;
                 serviceTypeInput.value = serviceType;
-                 if (serviceType.includes('Пакет:')) {
-            document.getElementById('selected-tariff').value = serviceType;
-        }
+                const tariffField = document.getElementById('selected_tariff');
+    if (serviceType.includes('Пакет:')) {
+        tariffField.value = serviceType.replace('Пакет: ', '');
+    } else {
+        tariffField.value = 'Не выбран';  // Сброс, если это не тариф
+    }
             } else {
                 modalTitle.textContent = 'Оставить заявку';
                 serviceTypeInput.value = '';
