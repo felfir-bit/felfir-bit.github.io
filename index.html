@@ -937,7 +937,7 @@
         })();
 
         // Конфигурация Google Sheets
-        const https://script.google.com/macros/s/AKfycbxTgN5INeVN1fR56WXq_7iSl__k-DkmIb9fKhfCAe1QvgqYzLzGWMCHw2kmDc8QPUCDjQ/exec = "https://script.google.com/macros/s/AKfycbzgkxvXsC-rv7nc8ElYHP6SiIruYQa-TuHX5hhq3bImqtGu2Lk6d8hpLHph2LWJKH_1NQ/exec";
+        const GOOGLE_SCRIPT_URL =  "https://script.google.com/macros/s/AKfycbzgkxvXsC-rv7nc8ElYHP6SiIruYQa-TuHX5hhq3bImqtGu2Lk6d8hpLHph2LWJKH_1NQ/exec";
 
         // Мобильное меню
         const mobileMenuButton = document.getElementById('mobile-menu-button');
@@ -1095,7 +1095,7 @@
         // Отправка данных в Google Sheets
         async function sendToGoogleSheet(data) {
             try {
-                const response = await fetch(https://script.google.com/macros/s/AKfycbxTgN5INeVN1fR56WXq_7iSl__k-DkmIb9fKhfCAe1QvgqYzLzGWMCHw2kmDc8QPUCDjQ/exec, {
+                const response = await fetch("https://script.google.com/macros/s/AKfycbxTgN5INeVN1fR56WXq_7iSl__k-DkmIb9fKhfCAe1QvgqYzLzGWMCHw2kmDc8QPUCDjQ/exec, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
