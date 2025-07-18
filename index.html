@@ -257,6 +257,11 @@
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+        /* Добавьте в самый конец <style> */
+.section {
+  opacity: 1 !important;
+  transform: none !important;
+}
     </style>
 </head>
 <body class="bg-gray-50">
@@ -1093,32 +1098,36 @@
         }
         
         // Отправка данных в Google Sheets
-        async function sendToGoogleSheet(data) {
-            try {
-                const response = await fetch("https://script.google.com/macros/s/AKfycbxTgN5INeVN1fR56WXq_7iSl__k-DkmIb9fKhfCAe1QvgqYzLzGWMCHw2kmDc8QPUCDjQ/exec, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        name: data.name || "",
-                        phone: data.phone || "",
-                        message: data.message || "",
-                        service: data.service || "",
-                        date: new Date().toLocaleString("ru-RU"),
-                        formType: data.formType || "Общий запрос",
-                        tariff: data.tariff || "Не указан",
-                        email: data.email || "Не указан"
-                    }),
-                });
-                
-                const result = await response.json();
-                return result.result === "success";
-            } catch (error) {
-                console.error("Ошибка:", error);
-                return false;
-            }
-        }
+   async function sendToGoogleSheet(data) {
+    try {
+        const payload = {
+            name: data.name || "",
+            phone: data.phone || "",
+            message: data.message || "",
+            service: data.service || "",
+            date: new Date().toLocaleString("ru-RU"),
+            formType: data.formType || "Общий запрос",
+            tariff: data.tariff || "Не указан",
+            email: data.email || "Не указан"
+        };
+
+        const response = await fetch("https://script.google.com/macros/s/AKfycbxTgN5INeVN1fR56WXq_7iSl__k-DkmIb9fKhfCAe1QvgqYzLzGWMCHw2kmDc8QPUCDjQ/exec", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const result = await response.json();
+        return result.result === "success";
+        
+    } catch (error) {
+        console.error("Ошибка отправки:", error);
+        return false;
+    }
+}
         
         // Отправка формы
         function sendFormWithEmailJS(formElement) {
