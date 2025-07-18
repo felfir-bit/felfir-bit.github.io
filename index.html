@@ -743,6 +743,7 @@
             
             <form id="modal-form" class="space-y-4">
                 <input type="hidden" id="service-type" name="service-type">
+                <input type="hidden" id="selected-plan" name="selected-plan" value="">
                 
                 <div>
                     <label for="modal-name" class="block mb-2 text-gray-700">Ваше имя *</label>
@@ -832,23 +833,16 @@
         }
         
         // Модальное окно заявки
+        
         const modal = document.getElementById('modal');
         const modalTitle = document.getElementById('modal-title');
         const serviceTypeInput = document.getElementById('service-type');
         
         function openModal(serviceType = '') {
-            if (serviceType) {
-                modalTitle.textContent = `Заявка: ${serviceType}`;
-                serviceTypeInput.value = serviceType;
-            } else {
-                modalTitle.textContent = 'Оставить заявку';
-                serviceTypeInput.value = '';
-            }
-            
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        
+           // Обновляем скрытое поле с выбранным тарифом
+if (serviceType.includes('Пакет:')) {
+    document.getElementById('selected-plan').value = serviceType.replace('Пакет: ', '');
+}
         function closeModal() {
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
@@ -1114,6 +1108,7 @@ function sendFormWithEmailJS(formElement) {
         message: formElement.querySelector("[name='message']")?.value.trim() || "-",
         email: formElement.querySelector("[name='email']")?.value.trim() || "-",
         service: formElement.querySelector("[name='service-type']")?.value || "Общий запрос",
+        plan: formElement.querySelector("[name='selected-plan']")?.value || "Не указан",
         formType: formElement.id === "modal-form" ? "Модальная форма" : "Основная форма"
     };
 
