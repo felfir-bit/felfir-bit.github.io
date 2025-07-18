@@ -907,17 +907,24 @@ function sendFormWithEmailJS(formElement) {
 
 <script>
   // Конфигурация
-  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyBWhqL0U4VZWUDQgoyxKKO0JvROYUXeiLFPRRuEXPPyq1bNZx2GuPKSZGbxXS-Wzjh/exec";
+  const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzgkxvXsC-rv7nc8ElYHP6SiIruYQa-TuHX5hhq3bImqtGu2Lk6d8hpLHph2LWJKH_1NQ/exec";
 
-  // Функция отправки в Google Sheets
-  async function sendToGoogleSheets(data) {
+  // Объявляем функцию в глобальной области видимости
+  window.sendToGoogleSheet = async function(data) {
     try {
       const response = await fetch(GOOGLE_SCRIPT_URL, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          name: data.name || "",
+          phone: data.phone || "",
+          message: data.message || "",
+          service: data.service || "",
+          date: new Date().toLocaleString("ru-RU"),
+          formType: data.formType || "Общий запрос"
+        }),
       });
       
       const result = await response.json();
@@ -951,11 +958,15 @@ function sendFormWithEmailJS(formElement) {
       phone: this.querySelector('[name="phone"]').value.trim(),
       message: this.querySelector('[name="message"]')?.value.trim() || "-",
       service: "Общий запрос",
-      date: new Date().toLocaleString("ru-RU"),
       formType: "Основная форма"
     };
     
-    sendToGoogleSheets(formData);
+    if (!formData.name || !validatePhone(formData.phone)) {
+      Swal.fire('Ошибка', 'Пожалуйста, заполните все обязательные поля правильно', 'error');
+      return;
+    }
+    
+    sendToGoogleSheet(formData);
     this.reset();
   });
 
@@ -969,16 +980,20 @@ function sendFormWithEmailJS(formElement) {
       email: this.querySelector('[name="email"]')?.value.trim() || "-",
       message: this.querySelector('[name="message"]')?.value.trim() || "-",
       service: this.querySelector('[name="service-type"]').value || "Общий запрос",
-      date: new Date().toLocaleString("ru-RU"),
       formType: "Модальная форма"
     };
     
-    sendToGoogleSheets(formData);
+    if (!formData.name || !validatePhone(formData.phone)) {
+      Swal.fire('Ошибка', 'Пожалуйста, заполните все обязательные поля правильно', 'error');
+      return;
+    }
+    
+    sendToGoogleSheet(formData);
     closeModal();
     this.reset();
   });
 
-  // Валидация телефона (добавьте в существующий скрипт)
+  // Функция валидации телефона
   function validatePhone(phone) {
     const regex = /^(\+7|8)[\s(]?\d{3}[)\s]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
     return regex.test(phone);
