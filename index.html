@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Automation Group - Автоматизация бизнеса под ключ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Кастомные стили */
+        :root {
+            --primary: #1e1e2f;
+            --secondary: #007bff;
+            --light: #f5f5f5;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--secondary);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+        
+        .section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+        
+        .back-to-top.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 500px;
+            width: 90%;
+            animation: modalFadeIn 0.3s ease;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .input-error {
+            border-color: #ff3860 !important;
+        }
+        
+        .error-message {
+            color: #ff3860;
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+    </style>
+
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<script>
+  (function(){
+    emailjs.init("EM5fcMMw75mveebqX");
+  })();
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+</head>
+<body class="bg-gray-50">
+    <!-- Навигация -->
+    <nav class="bg-white shadow-md fixed w-full z-50">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="flex items-center">
+                <div class="bg-blue-600 text-white p-2 rounded-lg mr-2">
+                    <i class="fas fa-robot text-xl"></i>
+                </div>
+                <span class="text-xl font-bold text-gray-800">Business Automation Group</span>
+            </a>
+            
+            <div class="hidden md:flex space-x-8">
+                <a href="#about" class="nav-link text-gray-700 hover:text-blue-600 transition">О нас</a>
+                <a href="#advantages" class="nav-link text-gray-700 hover:text-blue-600 transition">Преимущества</a>
+                <a href="#services" class="nav-link text-gray-700 hover:text-blue-600 transition">Услуги</a>
+                <a href="#cases" class="nav-link text-gray-700 hover:text-blue-600 transition">Кейсы</a>
+                <a href="#contact" class="nav-link text-gray-700 hover:text-blue-600 transition">Контакты</a>
+            </div>
+            
+            <button onclick="openModal()" class="hidden md:block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition">
+                Оставить заявку
+            </button>
+            
+            <!-- Мобильное меню -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-700 focus:outline-none">
+                <i class="fas fa-bars text-2xl"></i>
+            </button>
+        </div>
+        
+        <!-- Мобильное меню (скрытое) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white w-full px-4 py-2 shadow-lg">
+            <div class="flex flex-col space-y-3">
+                <a href="#about" class="text-gray-700 hover:text-blue-600 py-2" onclick="closeMobileMenu()">О нас</a>
+                <a href="#advantages" class="text-gray-700 hover:text-blue-600 py-2" onclick="closeMobileMenu()">Преимущества</a>
+                <a href="#services" class="text-gray-700 hover:text-blue-600 py-2" onclick="closeMobileMenu()">Услуги</a>
+                <a href="#cases" class="text-gray-700 hover:text-blue-600 py-2" onclick="closeMobileMenu()">Кейсы</a>
+                <a href="#contact" class="text-gray-700 hover:text-blue-600 py-2" onclick="closeMobileMenu()">Контакты</a>
+                <button onclick="openModal()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition w-full">
+                    Оставить заявку
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero-блок -->
+    <header class="pt-24 pb-16 md:pt-32 md:pb-24 bg-gradient-to-r from-blue-900 to-blue-700 text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6">Автоматизация бизнеса для роста прибыли</h1>
+                    <p class="text-xl mb-8 opacity-90">Мы помогаем компаниям внедрять современные технологии для автоматизации процессов, увеличения продаж и снижения затрат.</p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <button onclick="openModal()" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold">
+                            Оставить заявку
+                        </button>
+                        <a href="#services" class="bg-white text-blue-700 px-8 py-3 rounded-lg font-semibold text-center hover:bg-gray-100 transition">
+                            Наши услуги
+                        </a>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                         alt="Автоматизация бизнеса" 
+                         class="rounded-lg shadow-xl w-full max-w-md">
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- О компании -->
+    <section id="about" class="py-16 bg-white section">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">О компании</h2>
+                <div class="w-20 h-1 bg-blue-600 mx-auto"></div>
+            </div>
+            
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                         alt="Наша команда" 
+                         class="rounded-lg shadow-lg w-full">
+                </div>
+                <div class="md:w-1/2 md:pl-12">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Business Automation Group</h3>
+                    <p class="text-gray-600 mb-6">Мы - команда экспертов в области автоматизации бизнес-процессов с более чем 7-летним опытом работы. Наша миссия - помогать компаниям становиться эффективнее с помощью современных технологий.</p>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-check-circle text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">50+ проектов</h4>
+                                <p class="text-gray-600 text-sm">Успешно реализованных</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-users text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">15 экспертов</h4>
+                                <p class="text-gray-600 text-sm">В команде</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-chart-line text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">30% роста</h4>
+                                <p class="text-gray-600 text-sm">Средний результат клиентов</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <div class="bg-blue-100 p-3 rounded-full mr-4">
+                                <i class="fas fa-clock text-blue-600"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">7 дней</h4>
+                                <p class="text-gray-600 text-sm">Средний срок внедрения</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="openModal()" class="btn-primary text-white px-6 py-3 rounded-lg font-semibold">
+                        Получить консультацию
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Преимущества -->
+    <section id="advantages" class="py-16 bg-gray-50 section">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Наши преимущества</h2>
+                <div class="w-20 h-1 bg-blue-600 mx-auto"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <i class="fas fa-bolt text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-4">Быстрое внедрение</h3>
+                    <p class="text-gray-600 text-center">Средний срок внедрения решений - 7 дней. Мы ценим ваше время и работаем максимально оперативно.</p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <i class="fas fa-user-tie text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-4">Индивидуальный подход</h3>
+                    <p class="text-gray-600 text-center">Для каждого клиента мы разрабатываем уникальное решение, учитывающее специфику бизнеса.</p>
+                </div>
+                
+                <div class="bg-white p-8 rounded-lg shadow-md hover:shadow-lg transition">
+                    <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <i class="fas fa-headset text-blue-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-center mb-4">Поддержка 24/7</h3>
+                    <p class="text-gray-600 text-center">Наши специалисты всегда на связи и готовы помочь в любое время суток.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Услуги -->
+    <section id="services" class="py-16 bg-white section">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Наши услуги</h2>
+                <div class="w-20 h-1 bg-blue-600 mx-auto"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Услуга 1 -->
+                <div class="service-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                    <div class="h-48 bg-blue-600 flex items-center justify-center">
+                        <i class="fas fa-cogs text-white text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3">Внедрение CRM-систем</h3>
+                        <p class="text-gray-600 mb-4">Настройка и внедрение CRM (Bitrix24, amoCRM и другие) под ваши бизнес-процессы для автоматизации продаж и управления клиентами.</p>
+                        <ul class="mb-4 space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-blue-600 mt-1 mr-2"></i>
+                                <span class="text-gray-600">Настройка воронки продаж</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-blue-600 mt-1 mr-2"></i>
+                                <span class="text-gray-600">Интеграция с сайтом и телефонией</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-blue-600 mt-1 mr-2"></i>
+                                <span class="text-gray-600">Обучение сотрудников</span>
+                            </li>
+                        </ul>
+                        <button onclick="openModal('Внедрение CRM-систем')" class="text-blue-600 font-semibold hover:text-blue-800 transition">
+                            Узнать подробнее →
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Услуга 2 -->
+                <div class="service-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                    <div class="h-48 bg-blue-600 flex items-center justify-center">
+                        <i class="fas fa-robot text-white text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3">Разработка чат-ботов</h3>
+                        <p class="text-gray-600 mb-4">Создание умных чат-ботов для Telegram, WhatsApp и других мессенджеров для автоматизации общения с клиентами.</p>
+                        <ul class="mb-4 space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-blue-600 mt-1 mr-2"></i>
+                                <span class="text-gray-600">Обработка заявок 24/7</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-blue-600 mt-1 mr-2"></i>
+                                <span class="text-gray-600">Интеграция с CRM</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-blue-600 mt-1 mr-2"></i>
+                                <span class="text-gray-600">Мультиязычная поддержка</span>
+                            </li>
+                        </ul>
+                        <button onclick="openModal('Разработка чат-ботов')" class="text-blue-600 font-semibold hover:text-blue-800 transition">
+                            Узнать подробнее →
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Услуга 3 -->
+                <div class="service-card bg-white rounded-lg shadow-md overflow-hidden transition duration-300">
+                    <div class="h-48 bg-blue-600 flex items-center justify-center">
+                        <i class="fas fa-chart-pie text-white text-6xl"></i>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold mb-3">Сквозная аналитика</h3>
+                        <p class="text-gray-600 mb-4">Настройка системы сквозной аналитики для точного измерения эффективности маркетинга и продаж.</p>
+                        <ul class="mb-4 space-y-2">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-blue-600 mt-1 mr-2"></i>
+                                <span class="text-gray-600">Отслеживание всех каналов</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-blue-600 mt-1 mr-2"></i>
+                                <span class="text-gray-600">ROI по каждому каналу</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-blue-600 mt-1 mr-2"></i>
+                                <span class="text-gray-600">Автоматические отчеты</span>
+                            </li>
+                        </ul>
+                        <button onclick="openModal('Сквозная аналитика')" class="text-blue-600 font-semibold hover:text-blue-800 transition">
+                            Узнать подробнее →
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Кейсы -->
+    <section id="cases" class="py-16 bg-gray-50 section">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Наши кейсы</h2>
+                <div class="w-20 h-1 bg-blue-600 mx-auto"></div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Кейс 1 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="h-48 bg-gray-200 flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             alt="Интернет-магазин" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold">Интернет-магазин электроники</h3>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">CRM</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Внедрили CRM-систему для автоматизации обработки заказов и работы с клиентами.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">+40% к продажам</span>
+                            <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">-30% времени на обработку</span>
+                        </div>
+                        <button onclick="openModal('Кейс: Интернет-магазин электроники')" class="text-blue-600 font-semibold hover:text-blue-800 transition">
+                            Подробнее о кейсе →
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Кейс 2 -->
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <div class="h-48 bg-gray-200 flex items-center justify-center">
+                        <img src="https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             alt="Строительная компания" 
+                             class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-xl font-bold">Строительная компания</h3>
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold">Чат-бот</span>
+                        </div>
+                        <p class="text-gray-600 mb-4">Разработали чат-бота для Telegram, который обрабатывает 80% запросов клиентов автоматически.</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">+35% конверсии</span>
+                            <span class="bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">-50% нагрузки на менеджеров</span>
+                        </div>
+                        <button onclick="openModal('Кейс: Строительная компания')" class="text-blue-600 font-semibold hover:text-blue-800 transition">
+                            Подробнее о кейсе →
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button onclick="openModal('Запрос на кейсы')" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold">
+                    Получить больше кейсов
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Форма заявки -->
+    <section id="contact" class="py-16 bg-blue-700 text-white section">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold mb-4">Готовы автоматизировать свой бизнес?</h2>
+                    <p class="text-xl opacity-90">Оставьте заявку и получите бесплатную консультацию нашего эксперта</p>
+                </div>
+                
+                <form id="contact-form" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="name" class="block mb-2 font-medium">Ваше имя</label>
+                        <input type="text" id="name" name="name" 
+                               class="w-full px-4 py-3 rounded-lg bg-blue-800 border border-blue-600 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent placeholder-blue-400"
+                               placeholder="Иван Иванов">
+                        <div id="name-error" class="error-message">Пожалуйста, введите ваше имя</div>
+                    </div>
+                    
+                    <div>
+                        <label for="phone" class="block mb-2 font-medium">Телефон</label>
+                        <input type="tel" id="phone" name="phone" 
+                               class="w-full px-4 py-3 rounded-lg bg-blue-800 border border-blue-600 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent placeholder-blue-400"
+                               placeholder="+7 (999) 123-45-67">
+                        <div id="phone-error" class="error-message">Пожалуйста, введите корректный номер телефона</div>
+                    </div>
+                    
+                    <div class="md:col-span-2">
+                        <label for="message" class="block mb-2 font-medium">Ваш вопрос</label>
+                        <textarea id="message" name="message" rows="4"
+                                  class="w-full px-4 py-3 rounded-lg bg-blue-800 border border-blue-600 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent placeholder-blue-400"
+                                  placeholder="Расскажите о вашем бизнесе и задачах"></textarea>
+                    </div>
+                    
+                    <div class="md:col-span-2 flex items-center">
+                        <input type="checkbox" id="agree" name="agree" class="mr-3">
+                        <label for="agree" class="text-sm opacity-90">Я согласен на обработку персональных данных</label>
+                    </div>
+                    
+                    <div class="md:col-span-2 text-center">
+                        <button type="submit" class="btn-primary text-white px-8 py-3 rounded-lg font-semibold w-full md:w-auto">
+                            Получить консультацию
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-600 p-2 rounded-lg mr-2">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <span class="text-xl font-bold">Business Automation Group</span>
+                    </div>
+                    <p class="text-gray-400 mb-4">Автоматизация бизнеса под ключ. Решения для роста и масштабирования.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-telegram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Услуги</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Внедрение CRM</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Чат-боты</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Сквозная аналитика</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Интеграции</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Компания</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition">О нас</a></li>
+                        <li><a href="#advantages" class="text-gray-400 hover:text-white transition">Преимущества</a></li>
+                        <li><a href="#cases" class="text-gray-400 hover:text-white transition">Кейсы</a></li>
+                        <li><a href="#contact" class="text-gray-400 hover:text-white transition">Контакты</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Контакты</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-blue-500"></i>
+                            <span class="text-gray-400">г. Москва, ул. Примерная, 123</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-phone-alt mt-1 mr-3 text-blue-500"></i>
+                            <span class="text-gray-400">+7 (999) 123-45-67</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-envelope mt-1 mr-3 text-blue-500"></i>
+                            <span class="text-gray-400">info@bagroup.ru</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-clock mt-1 mr-3 text-blue-500"></i>
+                            <span class="text-gray-400">Пн-Пт: 9:00 - 18:00</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
+                <p>© 2023 Business Automation Group. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Кнопка "Наверх" -->
+    <div id="back-to-top" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Модальное окно -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-gray-800" id="modal-title">Оставить заявку</h3>
+                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="modal-form" class="space-y-4">
+                <input type="hidden" id="service-type" name="service-type">
+                
+                <div>
+                    <label for="modal-name" class="block mb-2 text-gray-700">Ваше имя</label>
+                    <input type="text" id="modal-name" name="name" 
+                           class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Иван Иванов">
+                    <div id="modal-name-error" class="error-message">Пожалуйста, введите ваше имя</div>
+                </div>
+                
+                <div>
+                    <label for="modal-phone" class="block mb-2 text-gray-700">Телефон</label>
+                    <input type="tel" id="modal-phone" name="phone" 
+                           class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="+7 (999) 123-45-67">
+                    <div id="modal-phone-error" class="error-message">Пожалуйста, введите корректный номер телефона</div>
+                </div>
+                
+                <div>
+                    <label for="modal-email" class="block mb-2 text-gray-700">Email (необязательно)</label>
+                    <input type="email" id="modal-email" name="email" 
+                           class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="email@example.com">
+                </div>
+                
+                <div>
+                    <label for="modal-message" class="block mb-2 text-gray-700">Ваш вопрос</label>
+                    <textarea id="modal-message" name="message" rows="3"
+                              class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              placeholder="Расскажите о вашем бизнесе и задачах"></textarea>
+                </div>
+                
+                <div class="flex items-center">
+                    <input type="checkbox" id="modal-agree" name="agree" class="mr-3">
+                    <label for="modal-agree" class="text-sm text-gray-700">Я согласен на обработку персональных данных</label>
+                </div>
+                
+                <button type="submit" class="w-full btn-primary text-white px-6 py-3 rounded-lg font-semibold">
+                    Отправить заявку
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Мобильное меню
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuButton.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        function closeMobileMenu() {
+            mobileMenu.classList.add('hidden');
+        }
+        
+        // Модальное окно
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const serviceTypeInput = document.getElementById('service-type');
+        
+        function openModal(serviceType = '') {
+            if (serviceType) {
+                modalTitle.textContent = `Заявка на услугу: ${serviceType}`;
+                serviceTypeInput.value = serviceType;
+            } else {
+                modalTitle.textContent = 'Оставить заявку';
+                serviceTypeInput.value = '';
+            }
+            
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // Сброс ошибок
+            document.getElementById('modal-name').classList.remove('input-error');
+            document.getElementById('modal-phone').classList.remove('input-error');
+            document.getElementById('modal-name-error').style.display = 'none';
+            document.getElementById('modal-phone-error').style.display = 'none';
+        }
+        
+        // Закрытие модального окна при клике вне его
+        window.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+        
+        // Валидация формы в модальном окне
+        const modalForm = document.getElementById('modal-form');
+        
+        modalForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let isValid = true;
+            const nameInput = document.getElementById('modal-name');
+            const phoneInput = document.getElementById('modal-phone');
+            const nameError = document.getElementById('modal-name-error');
+            const phoneError = document.getElementById('modal-phone-error');
+            
+            // Валидация имени
+            if (nameInput.value.trim() === '') {
+                nameInput.classList.add('input-error');
+                nameError.style.display = 'block';
+                isValid = false;
+            } else {
+                nameInput.classList.remove('input-error');
+                nameError.style.display = 'none';
+            }
+            
+            // Валидация телефона
+            const phoneRegex = /^(\+7|8)[\s(]?\d{3}[)\s]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
+            if (!phoneRegex.test(phoneInput.value.trim())) {
+                phoneInput.classList.add('input-error');
+                phoneError.style.display = 'block';
+                isValid = false;
+            } else {
+                phoneInput.classList.remove('input-error');
+                phoneError.style.display = 'none';
+            }
+            
+            // Валидация согласия
+            if (!document.getElementById('modal-agree').checked) {
+                alert('Пожалуйста, подтвердите согласие на обработку персональных данных');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // Здесь можно отправить форму (AJAX или обычным способом)
+                sendFormWithEmailJS(modalForm);
+                closeModal();
+            }
+        });
+        
+        // Валидация основной формы
+        const contactForm = document.getElementById('contact-form');
+        
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let isValid = true;
+            const nameInput = document.getElementById('name');
+            const phoneInput = document.getElementById('phone');
+            const nameError = document.getElementById('name-error');
+            const phoneError = document.getElementById('phone-error');
+            
+            // Валидация имени
+            if (nameInput.value.trim() === '') {
+                nameInput.classList.add('input-error');
+                nameError.style.display = 'block';
+                isValid = false;
+            } else {
+                nameInput.classList.remove('input-error');
+                nameError.style.display = 'none';
+            }
+            
+            // Валидация телефона
+            const phoneRegex = /^(\+7|8)[\s(]?\d{3}[)\s]?\d{3}[\s-]?\d{2}[\s-]?\d{2}$/;
+            if (!phoneRegex.test(phoneInput.value.trim())) {
+                phoneInput.classList.add('input-error');
+                phoneError.style.display = 'block';
+                isValid = false;
+            } else {
+                phoneInput.classList.remove('input-error');
+                phoneError.style.display = 'none';
+            }
+            
+            // Валидация согласия
+            if (!document.getElementById('agree').checked) {
+                alert('Пожалуйста, подтвердите согласие на обработку персональных данных');
+                isValid = false;
+            }
+            
+            if (isValid) {
+                // Здесь можно отправить форму (AJAX или обычным способом)
+                sendFormWithEmailJS(contactForm);
+            }
+        });
+        
+        // Кнопка "Наверх"
+        const backToTopButton = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('active');
+            } else {
+                backToTopButton.classList.remove('active');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Плавная прокрутка для якорных ссылок
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Анимация появления блоков при прокрутке
+        const sections = document.querySelectorAll('.section');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+        
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+        
+        // Инициализация всех секций как видимых при загрузке (для отключенного JS)
+        window.addEventListener('DOMContentLoaded', function() {
+            sections.forEach(section => {
+                section.classList.add('visible');
+            });
+        });
+    </script>
+
+<script>
+// Отправка формы через EmailJS
+function sendFormWithEmailJS(formElement) {
+    emailjs.sendForm("service_f0x3prq", "template_zbrybup", formElement)
+        .then(function() {
+            alert("Спасибо! Заявка успешно отправлена.");
+            const formData = {
+        name: formElement.querySelector("[name='name']").value,
+        phone: formElement.querySelector("[name='phone']").value,
+        message: formElement.querySelector("[name='message']")?.value || "-"
+    };
+    sendToGoogleSheet(formData);
+    formElement.reset();
+        }, function(error) {
+            alert("Ошибка отправки формы. Попробуйте позже.");
+            console.error("EmailJS Error:", error);
+        });
+}
+</script>
+
+
+<script>
+// Отправка формы через EmailJS + SweetAlert уведомления
+function sendFormWithEmailJS(formElement) {
+    emailjs.sendForm("service_f0x3prq", "template_zbrybup", formElement)
+        .then(function() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Спасибо!',
+                text: 'Заявка успешно отправлена.',
+                confirmButtonColor: '#007bff'
+            });
+            const formData = {
+        name: formElement.querySelector("[name='name']").value,
+        phone: formElement.querySelector("[name='phone']").value,
+        message: formElement.querySelector("[name='message']")?.value || "-"
+    };
+    sendToGoogleSheet(formData);
+    formElement.reset();
+        }, function(error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Ошибка!',
+                text: 'Ошибка отправки формы. Попробуйте позже.',
+                confirmButtonColor: '#d33'
+            });
+            console.error("EmailJS Error:", error);
+        });
+}
+</script>
+
+
+<script>
+function sendToGoogleSheet(data) {
+  fetch("https://script.google.com/macros/s/AKfycbyBWhqL0U4VZWUDQgoyxKKO0JvROYUXeiLFPRRuEXPPyq1bNZx2GuPKSZGbxXS-Wzjh/exec", {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }).then(res => {
+    console.log("Данные отправлены в Google Таблицу");
+  }).catch(err => {
+    console.error("Ошибка при отправке в таблицу:", err);
+  });
+}
+</script>
+
+</body>
+</html>
